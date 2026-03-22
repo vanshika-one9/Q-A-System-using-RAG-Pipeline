@@ -13,8 +13,12 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_huggingface import HuggingFaceEndpoint
 
-huggingface_api_key = os.getenv("HUGGINGFACE_API_KEY") # Set the Hugging Face Hub API token as an environment variable
-os.environ['HUGGINGFACEHUB_API_TOKEN'] = huggingface_api_key
+huggingface_api_key = st.secrets.get("HUGGINGFACE_API_KEY")
+
+if not huggingface_api_key:
+    raise ValueError("HUGGINGFACE_API_KEY is missing in Streamlit Secrets")
+
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = huggingface_api_key
 
 def process_input(input_type, input_data):
     """Processes different input types and returns a vectorstore."""
